@@ -45,6 +45,7 @@ inline long long dist(vector<short> &state) {
 
 inline void generate(vector<short> &state) {
     state[0] --;
+    // Threshold pruning
     state[4] = min(state[1] + state[4], max_need[0] * 2);
     state[5] = min(state[2] + state[5], max_need[1] * 2);
     state[6] = min(state[3] + state[6], max_need[2] * 2);
@@ -61,6 +62,7 @@ inline void relax(queue<vector<short>> &q, vector<short> &state, short dis) {
     }
 }
 
+// State: {time, robot_1, robot_2, robot_3, resource_1, resource_2, resource3}
 short dp(int cs) {
     short ret = 0;
     vector<short> start = {32, 1, 0, 0, 0, 0, 0};
@@ -74,6 +76,7 @@ short dp(int cs) {
         ret = max(ret, dis);
         if (u[0] * (u[0] - 1) / 2 + dis <= ret) continue;
         if (u[0] == 1) continue;
+        // Threshold pruning
         if (u[1] > max_need[0]) continue;
         if (u[2] > max_need[1]) continue;
         if (u[3] > max_need[2]) continue;
@@ -85,7 +88,7 @@ short dp(int cs) {
 
         // Build one robot
         for (int i = 3; i >= 0; i --) {
-            if (i < 3 && u[i + 4] >= (max_need[i] - u[i + 1]) * u[0]) continue;
+            if (i < 3 && u[i + 4] >= (max_need[i] - u[i + 1]) * u[0]) continue; // No need to build more of this type
             if (u[4] >= scripts[cur_script][i][0] && u[5] >= scripts[cur_script][i][1] && u[6] >= scripts[cur_script][i][2]) {
                 auto v = u;
                 v[4] -= scripts[cur_script][i][0];
