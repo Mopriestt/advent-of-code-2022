@@ -8,7 +8,7 @@
 
 using namespace std;
 
-int n = 0, scripts[100][5][3], cur_script;
+int n = 0, scripts[50][5][3];
 unordered_map<long long, short> f;
 unordered_set<long long> inq;
 int max_need[4];
@@ -89,11 +89,11 @@ short dp(int cs) {
         // Build one robot
         for (int i = 3; i >= 0; i --) {
             if (i < 3 && u[i + 4] >= (max_need[i] - u[i + 1]) * u[0]) continue; // No need to build more of this type
-            if (u[4] >= scripts[cur_script][i][0] && u[5] >= scripts[cur_script][i][1] && u[6] >= scripts[cur_script][i][2]) {
+            if (u[4] >= scripts[cs][i][0] && u[5] >= scripts[cs][i][1] && u[6] >= scripts[cs][i][2]) {
                 auto v = u;
-                v[4] -= scripts[cur_script][i][0];
-                v[5] -= scripts[cur_script][i][1];
-                v[6] -= scripts[cur_script][i][2];
+                v[4] -= scripts[cs][i][0];
+                v[5] -= scripts[cs][i][1];
+                v[6] -= scripts[cs][i][2];
                 generate(v);
                 if (i != 3) v[i + 1] ++;
                 relax(q, v, dis + (i == 3 ? v[0] : 0));
@@ -115,7 +115,7 @@ int main() {
     input(fmt);
 
     int ans = 1;
-    for (cur_script = 0; cur_script < 3; cur_script ++) {
+    for (int cur_script = 0; cur_script < 3; cur_script ++) {
         for (int i = 0; i < 3; i ++)
             for (int j = 0; j < 4; j ++)
                 max_need[i] = max(max_need[i], scripts[cur_script][j][i]);
