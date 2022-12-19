@@ -116,6 +116,7 @@ int main() {
 
     int ans = 1;
     for (int cur_script = 0; cur_script < 3; cur_script ++) {
+        memset(max_need, 0, sizeof(max_need));
         for (int i = 0; i < 3; i ++)
             for (int j = 0; j < 4; j ++)
                 max_need[i] = max(max_need[i], scripts[cur_script][j][i]);
