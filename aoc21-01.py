@@ -1,17 +1,19 @@
+import re
 from copy import deepcopy
 
 def hasLetter(s):
     return any(c.isalpha() for c in s)
 
-values = { l.split(':')[0] : l.split(':')[1].strip() for l in open('21.in').read().strip().split('\n') }
+values = { l.split(':')[0] : l.split(':')[1] for l in open('21.in').read().replace(' ', '').split('\n') }
 
 def calc(values):
     while hasLetter(values['root']):
         for key, value in values.items():
             if hasLetter(value):
-                for k, v in values.items():
-                    if not hasLetter(v):
-                        value = value.replace(k, v)
+                names = re.findall(r'\b\w+\b', value)
+                for name in names:
+                    if hasLetter(name):
+                        value = value.replace(name, '(' + values[name] + ')')
                 if not hasLetter(value): value = str(eval(value))
                 values[key] = value
             else:
@@ -24,8 +26,6 @@ def check(x, target1, target2):
     return eval(d[target1] + '-' + d[target2])
 
 t1, t2 = values['root'].split('+')
-t1 = t1.strip()
-t2 = t2.strip()
 r = 100000000000000
 l = -r
 while r > l:
@@ -33,7 +33,7 @@ while r > l:
     res = check(mid, t1, t2)
     print(l, ' ', r, ' ', res)
     if res == 0:
-        print(mid)
+        l = r = mid
         break
     if res < 0: r = mid - 1
     else: l = mid + 1
