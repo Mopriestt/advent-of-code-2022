@@ -8,8 +8,7 @@ values = { l.split(':')[0] : l.split(':')[1] for l in open('21.in').read().repla
 while hasLetter(values['root']):
     for key, value in values.items():
         if hasLetter(value):
-            names = re.findall(r'\b\w+\b', value)
-            for name in names:
+            for name in re.findall(r'\b\w+\b', value):
                 if hasLetter(name):
                     value = value.replace(name, '(' + values[name] + ')')
             if not hasLetter(value): value = str(eval(value))
