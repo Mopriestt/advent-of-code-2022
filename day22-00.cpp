@@ -34,7 +34,6 @@ void process() {
     mov += '$';
     
     for (int i = 0; i < mov.size(); i ++) {
-        cout<<i<<endl;
         if (mov[i] >= '0' && mov[i] <= '9') {
             step = step * 10 + mov[i] - 48;
             continue;
@@ -43,15 +42,20 @@ void process() {
         while (step --) {
             int x = cur_x + dx[dir];
             int y = cur_y + dy[dir];
-            if (x > d[y]) x = u[y];
-            if (x < u[y]) x = d[y];
-            if (y > r[x]) y = l[x];
-            if (y < l[x]) y = r[x];
+            if (dir & 1) {
+                if (x > d[y]) x = u[y];
+                if (x < u[y]) x = d[y];
+            } else {
+                if (y > r[x]) y = l[x];
+                if (y < l[x]) y = r[x];
+            }
             if (a[x][y] == '.') {
                 cur_x = x;
                 cur_y = y;
             }
+            else break;
         }
+        step = 0;
         
         if (mov[i] == 'L') dir = (dir + 3) % 4;
         if (mov[i] == 'R') dir = (dir + 1) % 4;
@@ -76,9 +80,9 @@ int main() {
             a[i] += ' ';
     
     cin >> mov;
-    
+
     init_boundary();
-    
+
     process();
     return 0;
 }
